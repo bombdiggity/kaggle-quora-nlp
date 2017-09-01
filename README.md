@@ -18,4 +18,13 @@ doc2vec_bow: ('41', 0.836), ('68375', 0.739), ('162563', 0.708)
 1. Use varying param values.
 
 ### Training on processed data
-- TODO
+| Iter | PV-DM | PV-BOW |
+|------|-------|--------|
+|  10  | ---s  |  ---s  |
+|  25  | 806s  |  766s  |
+
+- Checking top3 inferred vector similarity scores for test vector tag```41```<br>
+ doc2vec_dm: ('100632', 0.793), ('413230', 0.788), ('434535', 0.777)<br>
+ 
+- Checking top3 inferred vector similarity scores for test vector tag```41```<br>
+ doc2vec_bow: ('41', 0.714), ('146060', 0.713), ('127856', 0.709)
