@@ -20,7 +20,7 @@ doc2vec_bow: ('41', 0.836), ('68375', 0.739), ('162563', 0.708)
 ### Training on processed data
 | Iter | PV-DM | PV-BOW |
 |------|-------|--------|
-|  10  | ---s  |  ---s  |
+|  10  | 797s  |  317s  |
 |  25  | 806s  |  766s  |
 
 - Checking top3 inferred vector similarity scores for test vector tag```41```<br>
