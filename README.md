@@ -29,16 +29,18 @@ doc2vec_bow: ('41', 0.836), ('68375', 0.739), ('162563', 0.708)
 | 100  | 5      | 5         |  25  |
 
 
-- doc2vec_dm: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+- <b>doc2vec_dm</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
 
-|   Tag  | Score | Text                                          |
-|--------|-------|-----------------------------------------------|
-| 289333 | 0.662 | pakistani people look white                   |
-| 41     | 0.607 | rockets look white                            |
-| 430016 | 0.571 | africanamerican christians think jesus white  |
+|   Tag  | Score | Text                                                         |         
+|--------|-------|--------------------------------------------------------------|
+| 192611 | 0.618 | suitable inpatient drug alcohol rehab center white county ar |
+| 478558 | 0.610 | pays transaction charges white lebel ams                     |
+| 289333 | 0.609 | pakistani people look white                                  |
+
+The cosine similarity score for ```41 [u'rockets',u'look',u'white'] ``` using this model is <b>0.597</b>. Per the above model, <b>Tag 41</b> is the <b>6th</b> closest compared to all other tags.
  
  
-- doc2vec_bow: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+- <b>doc2vec_bow</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
 
 |   Tag  | Score | Text                                          |
 |--------|-------|-----------------------------------------------|
