@@ -23,6 +23,7 @@ doc2vec_bow: ('41', 0.836), ('68375', 0.739), ('162563', 0.708)
 |  10  | 797s  |  317s  |
 |  25  | 806s  |  766s  |
 |  50  | 1655s | 1704s  |
+| 100  | 11206s| 3190s  |
 
 ##### <b>Model1</b> Params:
 | size | window | min count | Iter |
@@ -69,6 +70,29 @@ The cosine similarity score for ```41 [u'rockets',u'look',u'white'] ``` using th
 |   Tag  | Score | Text                                               |
 |--------|-------|----------------------------------------------------|
 | 41     | 0.758 | rockets look white                                 |
-| 506224 | 0.722 | mixed race black white asian babies look lik       |
+| 506224 | 0.722 | mixed race black white asian babies look like       |
 | 335094 | 0.698 | white americans europeans generally look different |
+
+##### <b>Model3</b> Params:
+| size | window | min count | Iter |
+|------|--------|-----------|------|
+| 100  | 5      | 5         |  100 |
+
+
+- <b>doc2vec_dm</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+
+|   Tag  | Score | Text                                                           |         
+|--------|-------|----------------------------------------------------------------|
+| 498791 | 0.463 | cultural faux pas brooklyn                                     |
+| 295264 | 0.456 | redmi 3s survive 2yrs                                          |
+| 529641 | 0.450 | jake williams prebenedict cumberbatchsherlock holmes phase     |
+ 
+ 
+- <b>doc2vec_bow</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+
+|   Tag  | Score | Text                                               |
+|--------|-------|----------------------------------------------------|
+| 41     | 0.779 | rockets look white                                 |
+| 209447 | 0.659 | rockets usually red white                          |
+| 527551 | 0.650 | white ball pythons look like                       |
 
