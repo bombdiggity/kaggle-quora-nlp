@@ -22,8 +22,9 @@ doc2vec_bow: ('41', 0.836), ('68375', 0.739), ('162563', 0.708)
 |------|-------|--------|
 |  10  | 797s  |  317s  |
 |  25  | 806s  |  766s  |
+|  50  | 1655s | 1704s  |
 
-##### Model Params:
+##### <b>Model1</b> Params:
 | size | window | min count | Iter |
 |------|--------|-----------|------|
 | 100  | 5      | 5         |  25  |
@@ -47,3 +48,27 @@ The cosine similarity score for ```41 [u'rockets',u'look',u'white'] ``` using th
 | 41     | 0.771 | rockets look white                            |
 | 53956  | 0.743 | photon look like                              |
 | 72398  | 0.724 | black hole look like                          |
+
+##### <b>Model2</b> Params:
+| size | window | min count | Iter |
+|------|--------|-----------|------|
+| 100  | 5      | 5         |  50  |
+
+
+- <b>doc2vec_dm</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+
+|   Tag  | Score | Text                                            |         
+|--------|-------|-------------------------------------------------|
+| 41     | 0.746 | rockets look white                              |
+| 289333 | 0.735 | pakistani people look white                     |
+| 289334 | 0.706 | pakistani look white and others look brown?     |
+ 
+ 
+- <b>doc2vec_bow</b>: Top3 inferred vector similarity scores for test vector tag```41 [u'rockets',u'look',u'white'] ```<br>
+
+|   Tag  | Score | Text                                               |
+|--------|-------|----------------------------------------------------|
+| 41     | 0.758 | rockets look white                                 |
+| 506224 | 0.722 | mixed race black white asian babies look lik       |
+| 335094 | 0.698 | white americans europeans generally look different |
+
