@@ -11,9 +11,11 @@ method creates 2 LSTM
 # import keras as keras
 # from keras.layers.merge import concatenate
 # import numpy as np
+import string
 import sys
 import pandas as pd
 from gensim.models import KeyedVectors
+from nltk.corpus import stopwords
 
 
 cmdLineArgs = sys.argv[1:]
@@ -34,6 +36,23 @@ print("Dis-similar Queries: {}".format(label.value_counts()[0]))  #Dissimilar Qu
 # Prepare word embedding matrix using Google's Word2Vec
 GVectors = KeyedVectors.load_word2vec_format(word2vec,binary='True')
 print("\nSimilarity test for words \"2000\" and \"2001\" {}".format(GVectors.wv.similarity('lose','loose')))
+
+# Lets do some data processing
+def cleanData(input):
+
+    #Lowercase
+    new_input = input.lower()
+
+    #Remove punctuations
+    #predicate = lambda x: x not in string.punctuation
+    #unpunkt = filter(predicate,new_input)
+
+    #Remove stop words(Lets make this optional)
+    splits = new_input.split()
+    predicate = lambda x: x not in stopwords.words('english')
+    filtered = filter(predicate, splits)
+
+    return ' '.join(filtered)
 
 # Let's see which words from the corpus is not available in Vector form
 def findWordsNonVectorWords(word2vec,data):
