@@ -12,14 +12,14 @@ from sklearn.linear_model import LogisticRegression
 
 
 
-PV_DM   = 'doc2vec_def_dm'
-PV_DBOW = 'doc2vec_def_bow'
+PV_DM   = 'impr_doc2vec_def_dm'
+PV_DBOW = 'impr_doc2vec_def_bow'
 
 def prepData(args):
 
     q1_file = args[0]
     q2_file = args[1]
-
+ 
     q1_words, q1_tags = createTaggedDocuments(q1_file)
     q2_words, q2_tags = createTaggedDocuments(q2_file)
     #docs = createTaggedDocuments(q1_file) + createTaggedDocuments(q2_file)
@@ -68,7 +68,7 @@ def train_PV_BOW(docs):
 def compVectors(q1_tags, q2_tags, modelName):
 
     print("############## Finding Vector Similarity Scores for: {}".format(modelName))
-    fw = open("Sims_q1-q2_"+modelName,'w+')
+    fw = open("impr_Sims_q1-q2_"+modelName,'w+')
 
     model = Doc2Vec.load(modelName)
     for q1, q2 in zip(q1_tags,q2_tags):
@@ -81,13 +81,14 @@ def compVectors(q1_tags, q2_tags, modelName):
 
 def testSameVectors(modelName):
 
-    doc20 = [u'Why',u'do',u'rockets',u'look',u'white?']
+    #doc20 = [u'Why',u'do',u'rockets',u'look',u'white?']
+    doc20 = [u'rockets',u'look',u'white']
 
     print("############## {}: Checking Inferred Vector similarity for test vector".format(modelName))
 
     model = Doc2Vec.load(modelName)
     inferred_vector = model.infer_vector(doc20)
-    print(model.docvecs.most_similar([inferred_vector],topn=3))
+    print(model.docvecs.most_similar([inferred_vector],topn=10))
 
 
 def testClassifierLogistic(modelName):
@@ -103,22 +104,34 @@ def testClassifierLogistic(modelName):
     lr_classifier.score()
 
 
+def findMean(identifier, input):
+
+    val = reduce((lambda x,y:len(x.words)+len(y.words)),input)
+    print ("Mean of {} sentence length is {} words.".format(identifier,(val / len(input))))
+
+
 if __name__ == '__main__':
 
-    #taggedDocs = prepData(sys.argv[1:])
+    taggedDocs = prepData(sys.argv[1:])
     q1_words, q1_tags, q2_words, q2_tags = prepData(sys.argv[1:])
     taggedDocs = q1_words + q2_words
 
-    if not os.path.isfile(PV_DM) and not os.path.isfile(PV_DBOW):
+    #train_PV_DM(taggedDocs)
+    #train_PV_BOW(taggedDocs)
 
-        train_PV_DM(taggedDocs)
-        train_PV_BOW(taggedDocs)
+    # if not os.path.isfile(PV_DM) and not os.path.isfile(PV_DBOW):
+    #
+    #     train_PV_DM(taggedDocs)
+    #     train_PV_BOW(taggedDocs)
 
     compVectors(q1_tags, q2_tags, PV_DM)
     compVectors(q1_tags, q2_tags, PV_DBOW)
 
-    testSameVectors(PV_DM)
-    testSameVectors(PV_DBOW)
+    #testSameVectors(PV_DM)
+    #testSameVectors(PV_DBOW)
 
-    testClassifierLogistic(PV_DM)
-    testClassifierLogistic(PV_DBOW)
+    #findMean("Question1", q1_words)
+    #findMean("Question2", q2_words)
+
+    #testClassifierLogistic(PV_DM)
+    #testClassifierLogistic(PV_DBOW)

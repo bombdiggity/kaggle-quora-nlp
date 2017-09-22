@@ -1,12 +1,14 @@
 """
 Process the Quora Dataset.
 
-Usage: python preProcess.py train.csv
+Usage: python preProcessImpr.py train.csv
 """
 
 import sys
 import os
 import pandas as pd
+import string
+from nltk.corpus import stopwords
 
 def processDataset(input):
 
@@ -25,10 +27,10 @@ def processDataset(input):
     q2 = new_df["question2"]
     dup = new_df["is_duplicate"]
 
-    createQuestionFile("question1.txt",qid1,q1)
-    createQuestionFile("question2.txt",qid2,q2)
+    createQuestionFile("impr_question1.txt",qid1,q1)
+    createQuestionFile("impr_question2.txt",qid2,q2)
 
-    createLabelFile("label.txt",dup)
+    createLabelFile("impr_label.txt",dup)
 
 def createLabelFile(fname, data):
 
@@ -44,7 +46,7 @@ def createQuestionFile(fname,qids,sentences):
     for id, question in zip(qids, sentences):
         fq.write(str(id))
         fq.write(":")
-        fq.write(str(question))
+        fq.write(str(cleanData(question)))
         fq.write("\n")
 
     fq.close()
@@ -59,6 +61,23 @@ def calcDatasetStats(input):
     print("-------- Dataset Stats ----------")
     print("Question pairs that are similar: {}".format(dup.value_counts()[1]))
     print("Question pairs that are NOT similar: {}".format(dup.value_counts()[0]))
+
+def cleanData(input):
+
+    #Lowercase
+    new_input = input.lower()
+    print(new_input)
+
+    #Remove punctuations
+    predicate = lambda x: x not in string.punctuation
+    unpunkt = filter(predicate,new_input)
+
+    #Remove stop words(Lets make this optional)
+    splits = unpunkt.split()
+    predicate = lambda x: x not in stopwords.words('english')
+    filtered = filter(predicate, splits)
+
+    return ' '.join(filtered)
 
 
 if __name__ == "__main__":
