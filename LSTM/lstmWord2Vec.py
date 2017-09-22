@@ -43,5 +43,5 @@ def findWordsNonVectorWords(word2vec,data):
         print(OOV)
 
 
-#findWordsNonVectorWords(GVectors,question1)
-#findWordsNonVectorWords(GVectors,question2)
+findWordsNonVectorWords(GVectors,question1)
+findWordsNonVectorWords(GVectors,question2)
