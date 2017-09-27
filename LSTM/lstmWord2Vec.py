@@ -20,13 +20,15 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers.embeddings import Embedding
 from keras.layers.recurrent import LSTM
-from keras.layers import Input, Dense, Concatenate, BatchNormalization, Dropout
+from keras.layers import Input, Dense, BatchNormalization, Dropout
+from keras.layers.merge import concatenate
 from keras.models import Model
 from contractionsExpander import expandContractions
+import datetime
 import re
 
 
-MAX_WORDS = 20000
+MAX_WORDS = 200000
 MAX_LENGTH = 100
 EMBED_DIM = 300
 TEST_SPLIT = 0.8
@@ -88,7 +90,7 @@ pad_sequence2 = pad_sequences(sequences=sequence2, maxlen=MAX_LENGTH)
 # Embedding Layer
 word_index = tokenizer.word_index
 word_items = word_index.items()
-totalVocab = len(word_index)
+totalVocab = min(MAX_WORDS,len(word_index))+1
 embedding_matrix = np.zeros((totalVocab,EMBED_DIM))
 
 for word, index in word_items:
@@ -107,40 +109,57 @@ train_idx = shuffle_idx[:int(TEST_SPLIT * len(pad_sequence1))]
 test_idx = shuffle_idx[-int(1-(TEST_SPLIT*len(pad_sequence1))):]
 
 train1_data = [ pad_sequence1[idx] for idx in train_idx ]
+nptrain1_data = np.array(train1_data)
 train2_data = [ pad_sequence2[idx] for idx in train_idx ]
-train_label = [ label[idx] for idx in train_idx ]
+nptrain2_data = np.array(train2_data)
+labels = label.values
+train_label = [ labels[idx] for idx in train_idx ]
+nptrain_label = np.array(train_label)
 
 test1_data = [ pad_sequence1[idx] for idx in test_idx ]
+nptest1_data = np.array(test1_data)
 test2_data = [ pad_sequence2[idx] for idx in test_idx ]
-test_label = [ label[idx] for idx in test_idx ]
+nptest2_data = np.array(test2_data)
+test_label = [ labels[idx] for idx in test_idx ]
+nptest_label = np.array(test_label)
 
 # Define LSTM Model Architecture
 lstm_layer = LSTM(units=128,dropout=0.2,recurrent_dropout=0.2)
 
-input1 = Input(shape=(MAX_LENGTH), dtype='int32')
+input1 = Input(shape=(MAX_LENGTH,), dtype='int32')
 embedded_input1 = embed_layer(input1)
-lstm1_input = (embedded_input1)
+lstm1_input = lstm_layer(embedded_input1)
 
-input2 = Input(shape=(MAX_LENGTH), dtype='int32')
+input2 = Input(shape=(MAX_LENGTH,), dtype='int32')
 embedded_input2 = embed_layer(input2)
-lstm2_input = (embedded_input2)
+lstm2_input = lstm_layer(embedded_input2)
 
-layer = Concatenate([lstm1_input,lstm2_input])
+layer = concatenate([lstm1_input,lstm2_input])
 layer = Dropout(rate=0.2)(layer)
-layer = BatchNormalization(layer)
+layer = BatchNormalization()(layer)
 
 output = Dense(1,activation='sigmoid')(layer)
 
 # Model Functional API
-model = Model(inputs=[train1_data,train2_data], outputs=[output])
+model = Model(inputs=[input1,input2], outputs=[output])
 model.compile(loss='binary_crossentropy',optimizer='nadam',metrics=['acc'])
 print("Start Training the model")
-history = model.fit([train1_data,train2_data],train_label, batch_size=2048, epochs=100, shuffle=True)
+history = model.fit([nptrain1_data,nptrain2_data],nptrain_label, batch_size=2048, epochs=100, shuffle=True)
+
+# Save the model
+print("Saving model to disk")
+model_json = model.to_json()
+now = str(datetime.datetime.now())
+with open("model_json"+now,"w+") as json_file:
+    json_file.write(model_json)
+    json_file.close()
+
+model.save_weights("model_weights"+now+".h5")
 
 print("Model Training Complete. History: {}".format(history.history))
 
 print("Start Prediction")
-pred_result = model.predict([test1_data, test2_data], batch_size=2048,verbose=1)
+pred_result = model.predict([nptest1_data, nptest2_data], batch_size=2048,verbose=1)
 
 result_arr = [new_dataframe.ix[idx] for idx in test_idx]
 result_df = pd.DataFrame(result_arr)
