@@ -25,6 +25,7 @@ from keras.layers.merge import concatenate
 from keras.models import Model
 from keras.callbacks import EarlyStopping
 from contractionsExpander import expandContractions
+import matplotlib.pyplot as plt
 import datetime
 import re
 
@@ -170,6 +171,24 @@ result_df["predictions"] = pred_result
 print("Writing predictions to file")
 result_df.to_csv('prediction.csv', index=False, encoding='utf-8')
 
+# Summarizing history of training & validation loss
+print("Plotting training history")
+plt.figure(1)
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+
+# Summarizing history of training & validation accuracy
+plt.figure(2)
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Training','Validation'], loc='upper left')
+plt.show()
 
 
 def getWordVectors(word2vec,input):
