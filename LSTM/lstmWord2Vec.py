@@ -23,6 +23,7 @@ from keras.layers.recurrent import LSTM
 from keras.layers import Input, Dense, BatchNormalization, Dropout
 from keras.layers.merge import concatenate
 from keras.models import Model
+from keras.callbacks import EarlyStopping
 from contractionsExpander import expandContractions
 import datetime
 import re
@@ -143,8 +144,9 @@ output = Dense(1,activation='sigmoid')(layer)
 # Model Functional API
 model = Model(inputs=[input1,input2], outputs=[output])
 model.compile(loss='binary_crossentropy',optimizer='nadam',metrics=['acc'])
+early_stopping = EarlyStopping(monitor='val_loss',patience=2)
 print("Start Training the model")
-history = model.fit([nptrain1_data,nptrain2_data],nptrain_label, batch_size=2048, epochs=100, shuffle=True)
+history = model.fit([nptrain1_data,nptrain2_data],nptrain_label, batch_size=2048, validation_split=0.2,epochs=100, shuffle=True,callbacks=[early_stopping])
 
 # Save the model
 print("Saving model to disk")
