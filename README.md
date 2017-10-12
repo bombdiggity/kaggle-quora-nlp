@@ -1,5 +1,5 @@
 # kaggle-quora-nlp
-The trainng dataset consists of **149263** pairs of questions that have similar meaning and **255025** pairs of questions that are dissimilar.
+The training dataset consists of **149263** pairs of questions that have similar meaning and **255025** pairs of questions that are dis-similar.
 
 ## PV-DM & PV-BOW methods
 ### Training on unprocessed data
